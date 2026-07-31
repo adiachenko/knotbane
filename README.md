@@ -53,8 +53,6 @@ vendor/bin/knotbane --json src packages/Billing/src
 - `1`: at least one target or source could not be analyzed. Findings from valid sources are still reported.
 - `2`: the command invocation is invalid.
 
-Diagnostics are written to standard error, leaving standard output usable as either a text or JSON report.
-
 ## Code improvement workflow
 
 Run Knotbane on the code relevant to the current task, inspect the highest-ranked code units, and decide whether their branching is genuinely difficult to understand. After refactoring, rerun the same command and compare the ranking.
@@ -63,15 +61,15 @@ Reducing the score is not the objective by itself. Arbitrary method extraction o
 
 ## Agent skill
 
-Knotbane includes an agent skill that targets cyclomatic complexity of 4 or lower, treats 6 as the usual maximum, and rejects refactors that only move branching elsewhere.
+Knotbane includes an agent skill that targets cyclomatic complexity of 4 or lower and treats 6 as the usual maximum.
 
-Just ask Codex or Claude Code to install this skill from the repository, or run:
+Just ask Codex or Claude Code to install [this skill](https://github.com/adiachenko/knotbane/blob/main/skills/knotbane/SKILL.md) from the repository, or run:
 
 ```shell
 npx skills add adiachenko/knotbane --global
 ```
 
-Then invoke `/knotbane` on the PHP code you want measured and simplified.
+Then invoke `/knotbane` on the PHP code you want **measured and simplified**.
 
 ## Contributing
 
