@@ -1,0 +1,27 @@
+# MacOS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+vendor/
+
+# Caches
+.phpunit.cache/
+.php-cs-fixer.cache
+
+# Local configuration overrides
+phpunit.xml
+phpstan.neon
+
+# Editors
+.idea/
+.zed/
+.vscode/
+
+# Agents
+.agents/
+.claude/
+.codex/
+.mcp.json
+CLAUDE.md
