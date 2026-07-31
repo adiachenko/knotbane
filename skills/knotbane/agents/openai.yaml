@@ -1,0 +1,4 @@
+interface:
+  display_name: "Knotbane"
+  short_description: "Simplify PHP complexity without metric gaming"
+  default_prompt: "/knotbane Measure and simplify the relevant PHP code."
