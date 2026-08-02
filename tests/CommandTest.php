@@ -48,6 +48,71 @@ it('emits machine-readable findings', function () {
         ]);
 });
 
+it('runs from Composer installations through vendor proxies and CPX', function () {
+    $projectRoot = dirname(__DIR__);
+    $installation = sys_get_temp_dir().'/knotbane-package-'.bin2hex(random_bytes(8));
+    $packageRoot = $installation.'/vendor/adiachenko/knotbane';
+    $binary = $packageRoot.'/bin/knotbane';
+    $autoload = $installation.'/vendor/autoload.php';
+
+    mkdir(dirname($binary), recursive: true);
+    copy($projectRoot.'/bin/knotbane', $binary);
+    file_put_contents(
+        $autoload,
+        '<?php require '.var_export($projectRoot.'/vendor/autoload.php', true).';',
+    );
+
+    try {
+        $proxyResult = runProcess(
+            [
+                PHP_BINARY,
+                '-r',
+                <<<'PHP'
+                $GLOBALS['_composer_autoload_path'] = $argv[1];
+                $binary = $argv[2];
+                $argv = [$binary, ...array_slice($argv, 3)];
+                require $binary;
+                PHP,
+                $projectRoot.'/vendor/autoload.php',
+                $binary,
+                '--json',
+                $projectRoot.'/tests/Fixtures/Targets/low.php',
+            ],
+            $projectRoot,
+        );
+        $cpxResult = runProcess(
+            [
+                PHP_BINARY,
+                $binary,
+                '--json',
+                $projectRoot.'/tests/Fixtures/Targets/low.php',
+            ],
+            $projectRoot,
+        );
+    } finally {
+        unlink($binary);
+        unlink($autoload);
+        rmdir(dirname($binary));
+        rmdir($packageRoot);
+        rmdir(dirname($packageRoot));
+        rmdir(dirname($packageRoot, 2));
+        rmdir($installation);
+    }
+
+    expect($proxyResult['exitCode'])->toBe(0)
+        ->and($proxyResult['stderr'])->toBe('')
+        ->and(json_decode($proxyResult['stdout'], true, flags: JSON_THROW_ON_ERROR))->toMatchArray([
+            'analyzedFiles' => 1,
+            'reportedCodeUnits' => 0,
+        ])
+        ->and($cpxResult['exitCode'])->toBe(0)
+        ->and($cpxResult['stderr'])->toBe('')
+        ->and(json_decode($cpxResult['stdout'], true, flags: JSON_THROW_ON_ERROR))->toMatchArray([
+            'analyzedFiles' => 1,
+            'reportedCodeUnits' => 0,
+        ]);
+});
+
 it('reports findings and failure when another target is missing', function () {
     $result = runKnotbane(
         '--min-cc',

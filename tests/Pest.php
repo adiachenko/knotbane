@@ -8,16 +8,29 @@ declare(strict_types=1);
 function runKnotbane(string ...$arguments): array
 {
     $projectRoot = dirname(__DIR__);
+
+    return runProcess(
+        [PHP_BINARY, $projectRoot.'/bin/knotbane', ...$arguments],
+        $projectRoot,
+    );
+}
+
+/**
+ * @param  list<string>  $command
+ * @return array{exitCode: int, stdout: string, stderr: string}
+ */
+function runProcess(array $command, string $workingDirectory): array
+{
     $pipes = [];
     $process = proc_open(
-        [PHP_BINARY, $projectRoot.'/bin/knotbane', ...$arguments],
+        $command,
         [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
             2 => ['pipe', 'w'],
         ],
         $pipes,
-        $projectRoot,
+        $workingDirectory,
     );
 
     if (! is_resource($process)) {

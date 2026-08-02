@@ -1,6 +1,13 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+$packageRoot = dirname(__DIR__);
+$autoload = $GLOBALS['_composer_autoload_path'] ?? $packageRoot.'/vendor/autoload.php';
+
+if (! is_file($autoload)) {
+    $autoload = dirname($packageRoot, 2).'/autoload.php';
+}
+
+require $autoload;
 
 exit((new Knotbane\Command)->run($argv));
