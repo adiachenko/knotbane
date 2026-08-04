@@ -11,7 +11,7 @@ Use Knotbane as a review signal; optimize for code that is easier to understand 
 
 1. Before editing, define the smallest analysis scope that covers every PHP code unit whose branching may change or receive moved decisions. Exclude unrelated hotspots unless the user requests broader work.
 
-2. Run the project-installed `vendor/bin/knotbane` when available; otherwise run Knotbane through CPX with `cpx adiachenko/knotbane`. Invoke the selected command on that scope with JSON output and a minimum cyclomatic complexity of 5; retain the invocation, diagnostics, and findings as the baseline. Treat exit status 0 as analysis success, not acceptable complexity, and resolve analysis failures before relying on the comparison.
+2. Run the project-installed `vendor/bin/knotbane` when available; otherwise run Knotbane through CPX with `cpx adiachenko/knotbane`. Before invoking CPX, use its default cache unless the execution environment restricts home-directory writes. When it does, set `CPX_HOME` to a writable temporary directory supplied by the environment before the first invocation; handle CPX cache restrictions this way rather than requesting broader filesystem access. Invoke the selected command on that scope with JSON output and a minimum cyclomatic complexity of 5; retain the invocation, diagnostics, and findings as the baseline. Treat exit status 0 as analysis success, not acceptable complexity, and resolve analysis failures before relying on the comparison.
 
 3. Interpret every task-relevant finding:
 
