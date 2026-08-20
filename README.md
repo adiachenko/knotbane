@@ -1,8 +1,16 @@
-# Knotbane
+<p align="center">
+  <img src="assets/header.png" alt="Knotbane header illustration of a cartoon chef discovering three meatballs tangled in one forkful of spaghetti" width="320">
+</p>
+
+<h1 align="center">Knotbane</h1>
+
+<p align="center">
+  <em>Knotbane finds cyclomatic complexity hotspots in targeted PHP code.</em>
+</p>
 
 [![Tests](https://github.com/adiachenko/knotbane/actions/workflows/tests.yml/badge.svg)](https://github.com/adiachenko/knotbane/actions/workflows/tests.yml)
 
-Knotbane finds cyclomatic complexity hotspots in targeted PHP code. It wraps [`sebastian/complexity`](https://github.com/sebastianbergmann/complexity) in a small Composer-installed CLI.
+Knotbane wraps [`sebastian/complexity`](https://github.com/sebastianbergmann/complexity) in a small Composer-installed CLI.
 
 Complexity is a review signal, not a quality verdict. Knotbane identifies where to look; it does not fail a run merely because a code unit has a high score.
 
